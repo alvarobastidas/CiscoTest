@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Summary</title>
+</head>
+<body>
+    <h2>Summary</h2>
+    <p><strong>Your Score:</strong> {{ score }} / {{ total }}</p>
+    <hr>
+
+    {% for result in results %}
+        <div>
+            <p><strong>{{ loop.index }}. {{ result.question }}</strong></p>
+            <p>Your Answer: {{ result.your_answer|join(', ') }}</p>
+            <p>Correct Answer: {{ result.correct_answer|join(', ') }}</p>
+            <p style="color: {{ 'green' if result.is_correct else 'red' }}">
+                {{ 'Correct!' if result.is_correct else 'Incorrect' }}
+            </p>
+        </div>
+        <hr>
+    {% endfor %}
+</body>
+</html>

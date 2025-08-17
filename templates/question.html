@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Question {{ qid + 1 }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <section id="question-number">
+        <h2>Question {{ qid + 1 }} of {{ questions|length }}</h2>
+    </section>
+
+    <section id="question-text">
+        <p><strong>{{ q.question_text }}</strong></p>
+    </section>
+
+    <section id="question-img">
+        <img src="{{ url_for('static', filename=q.question_img) }}" alt="">
+    </section>
+
+    <section id="question-options">
+         <form method="post">
+            {% for key, option in q.options.items() %}
+                {% if q.question_type == 'Question Single' %}
+                    <input type="radio" name="answer" value="{{ option }}"
+                           {% if key in previous_answers %}checked{% endif %}
+                           {% if show_result %}disabled{% endif %}
+                           required> {{ option }}<br>
+                {% endif %}
+                {% if q.question_type == 'Question Multiple' %}
+                    <input type="checkbox" name="answer" value="{{ option }}"
+                           {% if key in previous_answers %}checked{% endif %}
+                           {% if show_result %}disabled{% endif %}> {{ option }}<br>
+                {% endif %}
+            {% endfor %}
+
+            {% if show_result %}
+                <hr>
+                <p style="color: {{ 'green' if is_correct else 'red' }}">
+                    <strong>{{ 'Correct!' if is_correct else 'Incorrect.' }}</strong>
+                </p>
+                <p>Correct Answer: {{ q.correct_answer | join(', ') }}</p>
+                <button type="submit" name="continue">Continue</button>
+            {% else %}
+                <br>
+                {% if qid > 0 %}
+                    <button type="submit" name="prev">Previous</button>
+                {% endif %}
+                <button type="submit">Submit</button>
+            {% endif %}
+        </form>
+    </section>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
